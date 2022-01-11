@@ -1,0 +1,37 @@
+/* some colors you may find useful:
+  #115ff4
+  #060ce9
+  #28a200
+  #8d2ab5
+  #74119c
+*/
+
+body{
+  font-family: 'Copse';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+button{
+  display: block;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 7px;
+  color: whitesmoke;
+  background-color: #8d2ab5;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s linear;
+}
+
+button:hover{
+  background-color: #74119c;
+  color: white;
+}
+
