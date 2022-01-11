@@ -58,25 +58,46 @@ async function fillTable() {
     // Create table tags and variables
     const HEIGHT = 5;
     const WIDTH = 6;
-
     const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    const tbody = document.createElement('tbody');
-    let tr = document.createElement('tr');
-    let th = document.createElement('th');
+    const tHead = document.createElement('thead');
+    const tBody = document.createElement('tbody');
+    let tRowHead = document.createElement('tr');
+    let tRowData = document.createElement('tr');
     
     $(table).attr("id", "jeopardy")
-    .append(thead)
-    .append(tbody);
+    .append(tHead)
+    .append(tBody);
     $('body').append(table);
-    $(thead).append(tr);
-    $(tr).append(th);
     
+    // For table head
     for(let i=0; i<WIDTH; i++){
-        th.innerHTML = `<th>cat</th>`;
-        
+        $(tHead).append(tRowHead);
+        let tHeading = document.createElement('th'); 
+        let cats = ['categoty']
+        tHeading.innerHTML = cats[i];
+        tRowHead.append(tHeading);
     }
-    
+    $(tBody).append(tRowData);
+    // for table data
+    for(let k=0; k<HEIGHT; k++){
+        tRowData[k];
+
+
+    }
+
+    // for(let j=0; j<WIDTH; j++){
+    //     $(tBody).append(tRowData);
+    //     let tData = document.createElement('td'); 
+    //     let quest = ['questions']
+    //     tData.innerHTML = quest[j];
+    //     tRowData.append(tData);
+    // }
+
+
+    // let tData = document.createElement('td'); 
+    // let questAns = ['quest-ans']
+    // tData.innerHTML = questAns[i];
+    // tRow.append(tData)
     // console.log(hd);
     // tr.append(th);
     // Get API for questions and categories
