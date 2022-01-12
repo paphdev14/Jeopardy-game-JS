@@ -17,6 +17,9 @@ body{
   justify-content: center;
   min-height: 100vh;
   row-gap: 1rem;
+  max-width: 1170px;
+  margin: 0 auto;
+  background-color: hsl(103, 100%, 87%);
 }
 
 button{
@@ -37,17 +40,27 @@ button:hover{
   color: white;
 }
 
+table, th, td {
+  border: 1px solid whitesmoke;
+  border-collapse: collapse;
+}
+
 table{
   background: #74119c;
   color: whitesmoke;
   text-align: center;
-  /* border: none; */
-  font-size: 0.875rem;
+  border: none;
+  font-size: 1rem;
   letter-spacing: 1px;
   border: 1px solid whitesmoke;
 }
 
 th{
   text-transform: uppercase;
-  padding: 0.365rem;
+  padding: 1.5rem 3rem;
+}
+
+td{
+  padding: 4rem 2rem;
+  cursor: pointer;
 }

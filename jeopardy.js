@@ -26,11 +26,17 @@ let categories = [];
  * Returns array of category ids
  */
 
-function getCategoryIds() {
-    const tb = document.querySelector('table');
-    console.log(tb);
+async function getCategoryIds() {
+    const response = await axios.get('http://jservice.io/api/random?count=6');
+    categories.push(response.data.map(category =>({
+    id: category.category.id
+    })));
+    return categories;
 }
 
+// console.log(categories);
+
+// getCategoryIds()
 /** Return object with data about a category:
  *
  *  Returns { title: "Math", clues: clue-array }
@@ -44,7 +50,40 @@ function getCategoryIds() {
  */
 
 function getCategory(catId) {
+    for(let ids of categories){
+        for(let catId of ids){
+            // console.log(catId.id);
+            async function clueFunc() {
+                const res = await axios.get(`http://jservice.io/api/category?id=${catId.id}`);
+                let cl = res.data;
+                // console.log(cl);
+                let showData = cl.clues.map(clueObj =>{
+                    // console.log(clueObj);
+                    return
+                        [
+                            {
+                                title: cl.title,
+                                clues: [
+                                    {
+                                        question: clueObj.question,
+                                        answer: clueObj.answer,
+                                        showing: null
+                                    }
+                                ]
+                            }
+                        ]
+                });
+                return showData;
+            }
+            clueFunc()
+        }
+    }
+    getCategoryIds();
 }
+
+// getCategory(categories);
+// console.log(categories);
+
 
 /** Fill the HTML table#jeopardy with the categories & cells for questions.
  *
@@ -55,6 +94,8 @@ function getCategory(catId) {
  */
 
 async function fillTable() {
+    getCategory(categories);
+    console.log(categories);
     // Create table tags and variables
     const HEIGHT = 5;
     const WIDTH = 6;
@@ -62,8 +103,6 @@ async function fillTable() {
     const tHead = document.createElement('thead');
     const tBody = document.createElement('tbody');
     let tRowHead = document.createElement('tr');
-    let tRowData = document.createElement('tr');
-    
     $(table).attr("id", "jeopardy")
     .append(tHead)
     .append(tBody);
@@ -73,43 +112,29 @@ async function fillTable() {
     for(let i=0; i<WIDTH; i++){
         $(tHead).append(tRowHead);
         let tHeading = document.createElement('th'); 
-        let cats = ['categoty']
-        tHeading.innerHTML = cats[i];
+        tHeading.innerText = 'category'
         tRowHead.append(tHeading);
     }
-    $(tBody).append(tRowData);
     // for table data
     for(let k=0; k<HEIGHT; k++){
-        tRowData[k];
-
-
+        let tRowData = document.createElement('tr');
+        tBody.append(tRowData);
+     for(let j=0; j<WIDTH; j++){
+            let tData = document.createElement('td'); 
+            tData.innerText = '?';
+            tRowData.append(tData);
+            // Set table data IDs
+            tData.setAttribute('id', `${j}-${k}`);
+        }
     }
 
-    // for(let j=0; j<WIDTH; j++){
-    //     $(tBody).append(tRowData);
-    //     let tData = document.createElement('td'); 
-    //     let quest = ['questions']
-    //     tData.innerHTML = quest[j];
-    //     tRowData.append(tData);
-    // }
-
-
-    // let tData = document.createElement('td'); 
-    // let questAns = ['quest-ans']
-    // tData.innerHTML = questAns[i];
-    // tRow.append(tData)
-    // console.log(hd);
-    // tr.append(th);
-    // Get API for questions and categories
-    const response = await axios.get('http://jservice.io/api/clues');
-
+    const response = await axios.get('http://jservice.io/api/category?id=15511');
     let dataResponse = response.data;
-    // console.log(dataResponse);
-    
-
-
-    getCategoryIds();
+    console.log(dataResponse);
+    // return dataResponse;
+    // getCategoryIds();
 }
+
 fillTable();
 
 /** Handle clicking on a clue: show the question or answer.
