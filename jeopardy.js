@@ -17,9 +17,9 @@
 //    },
 //    ...
 //  ]
-
+const HEIGHT = 5;
+const WIDTH = 6;
 let categories = [];
-
 
 /** Get NUM_CATEGORIES random category from API.
  *
@@ -27,11 +27,10 @@ let categories = [];
  */
 
 async function getCategoryIds() {
-    const response = await axios.get('http://jservice.io/api/random?count=6');
-    categories.push(response.data.map(category =>({
-    id: category.category.id
-    })));
-    return categories;
+  let catIds = [];
+  const response = await axios.get("http://jservice.io/api/random?count=6");
+  response.data.forEach((category) => catIds.push(category.category.id));
+  return catIds;
 }
 
 // console.log(categories);
@@ -48,42 +47,39 @@ async function getCategoryIds() {
  *      ...
  *   ]
  */
+function shuffleAndPick(nbPick, array) {
+  // Shuffle array
+  const shuffled = array.sort(() => 0.5 - Math.random());
 
-function getCategory(catId) {
-    for(let ids of categories){
-        for(let catId of ids){
-            // console.log(catId.id);
-            async function clueFunc() {
-                const res = await axios.get(`http://jservice.io/api/category?id=${catId.id}`);
-                let cl = res.data;
-                // console.log(cl);
-                let showData = cl.clues.map(clueObj =>{
-                    // console.log(clueObj);
-                    return
-                        [
-                            {
-                                title: cl.title,
-                                clues: [
-                                    {
-                                        question: clueObj.question,
-                                        answer: clueObj.answer,
-                                        showing: null
-                                    }
-                                ]
-                            }
-                        ]
-                });
-                return showData;
-            }
-            clueFunc()
-        }
-    }
-    getCategoryIds();
+  // Get sub-array of first n elements after shuffled
+  return shuffled.slice(0, nbPick);
 }
 
+async function getCategories(categories) {
+  let allCategories = [];
+  for (let id of categories) {
+    // console.log(catId.id);
+    const res = await axios.get(`http://jservice.io/api/category?id=${id}`);
+    let data = res.data;
+    let clues = shuffleAndPick(HEIGHT, data.clues);
+    data.clues = clues;
+    allCategories.push(data);
+  }
+  return allCategories.map((c) => {
+    return {
+      title: c.title,
+      clues: c.clues.map((clue) => {
+        return {
+          question: clue.question,
+          answer: clue.answer,
+          showing: null,
+        };
+      }),
+    };
+  });
+}
 // getCategory(categories);
 // console.log(categories);
-
 
 /** Fill the HTML table#jeopardy with the categories & cells for questions.
  *
@@ -94,48 +90,35 @@ function getCategory(catId) {
  */
 
 async function fillTable() {
-    getCategory(categories);
-    console.log(categories);
-    // Create table tags and variables
-    const HEIGHT = 5;
-    const WIDTH = 6;
-    const table = document.createElement('table');
-    const tHead = document.createElement('thead');
-    const tBody = document.createElement('tbody');
-    let tRowHead = document.createElement('tr');
-    $(table).attr("id", "jeopardy")
-    .append(tHead)
-    .append(tBody);
-    $('body').append(table);
-    
-    // For table head
-    for(let i=0; i<WIDTH; i++){
-        $(tHead).append(tRowHead);
-        let tHeading = document.createElement('th'); 
-        tHeading.innerText = 'category'
-        tRowHead.append(tHeading);
-    }
-    // for table data
-    for(let k=0; k<HEIGHT; k++){
-        let tRowData = document.createElement('tr');
-        tBody.append(tRowData);
-     for(let j=0; j<WIDTH; j++){
-            let tData = document.createElement('td'); 
-            tData.innerText = '?';
-            tRowData.append(tData);
-            // Set table data IDs
-            tData.setAttribute('id', `${j}-${k}`);
-        }
-    }
+  // Create table tags and variables
 
-    const response = await axios.get('http://jservice.io/api/category?id=15511');
-    let dataResponse = response.data;
-    console.log(dataResponse);
-    // return dataResponse;
-    // getCategoryIds();
+  const table = document.createElement("table");
+  const tHead = document.createElement("thead");
+  const tBody = document.createElement("tbody");
+  let tRowHead = document.createElement("tr");
+  $(table).attr("id", "jeopardy").append(tHead).append(tBody);
+  $("body").append(table);
+
+  // For table head
+  for (let i = 0; i < WIDTH; i++) {
+    $(tHead).append(tRowHead);
+    let tHeading = document.createElement("th");
+    tHeading.innerText = "category";
+    tRowHead.append(tHeading);
+  }
+  // for table data
+  for (let k = 0; k < HEIGHT; k++) {
+    let tRowData = document.createElement("tr");
+    tBody.append(tRowData);
+    for (let j = 0; j < WIDTH; j++) {
+      let tData = document.createElement("td");
+      tData.innerText = "?";
+      tRowData.append(tData);
+      // Set table data IDs
+      tData.setAttribute("id", `${j}-${k}`);
+    }
+  }
 }
-
-fillTable();
 
 /** Handle clicking on a clue: show the question or answer.
  *
@@ -145,21 +128,17 @@ fillTable();
  * - if currently "answer", ignore click
  * */
 
-function handleClick(evt) {
-}
+function handleClick(evt) {}
 
 /** Wipe the current Jeopardy board, show the loading spinner,
  * and update the button used to fetch data.
  */
 
-function showLoadingView() {
-
-}
+function showLoadingView() {}
 
 /** Remove the loading spinner and update the button used to fetch data. */
 
-function hideLoadingView() {
-}
+function hideLoadingView() {}
 
 /** Start game:
  *
@@ -169,18 +148,10 @@ function hideLoadingView() {
  * */
 
 async function setupAndStart() {
-//     const body = document.querySelector('body');
-//     const table = document.createElement('table');
-//     table.setAttribute('id', 'jeopardy')
-//     body.appendChild(table);
-     
-//     const response = await axios.get('https://jservice.io/api/clues');
-//     console.log(response.data);
-//     response.data.map(category => {
-//         if(category.category_id === 2)
-//         console.log(category.category_id);
-
-//     });
+  const catIds = await getCategoryIds();
+  categories = await getCategories(catIds);
+  console.log(categories);
+  fillTable();
 }
 
 /** On click of start / restart button, set up game. */
@@ -191,4 +162,4 @@ async function setupAndStart() {
 
 // TODO
 
-// setupAndStart() 
+setupAndStart();
