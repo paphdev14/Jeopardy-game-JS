@@ -91,7 +91,7 @@ async function getCategories(categories) {
  *   (initally, just show a "?" where the question/answer would go.)
  */
 
-async function fillTable(query) {
+async function fillTable() {
   // Create table tags and variables
   const table = document.createElement("table");
   const tHead = document.createElement("thead");
@@ -117,8 +117,10 @@ async function fillTable(query) {
     // Table data
     for (let k = 0; k < WIDTH; k++) {
         let tData = document.createElement("td");
-    //   tData.innerText = "?";
-      tData.innerText = `${categories[k].clues[j].question}`;
+        let showClue = categories[k].clues[j].showing;
+        tData.innerText = `${showClue}`;
+        
+
       tRowData.append(tData);
       // Set table data IDs
       tData.setAttribute("id", `${k}-${j}`);
@@ -135,18 +137,25 @@ async function fillTable(query) {
  * */
 
 function handleClick(evt) {
-    fillTable();
+  fillTable(categories)
 }
 
 /** Wipe the current Jeopardy board, show the loading spinner,
  * and update the button used to fetch data.
  */
 
-function showLoadingView() {}
+function showLoadingView() {
+   const tBody =document.querySelector('tbody');
+   tBody.addEventListener('click', handleClick);
+    // const restart = document.getElementById('restart');
+    // restart.addEventListener('click', handleClick);
+}
 
 /** Remove the loading spinner and update the button used to fetch data. */
 
-function hideLoadingView() {}
+function hideLoadingView() {
+  // fillTable(categories).hide();
+}
 
 /** Start game:
  *
@@ -158,8 +167,13 @@ function hideLoadingView() {}
 async function setupAndStart() {
   const catIds = await getCategoryIds();
   categories = await getCategories(catIds);
-  console.log(categories);
+  $(categories).hide();
   fillTable();
+  hideLoadingView();
+  showLoadingView();
+  console.log(categories);
+  
+  
 }
 
 /** On click of start / restart button, set up game. */
