@@ -6,8 +6,17 @@
   #74119c
 */
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+
 body{
-  font-family: 'Copse';
+  font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -20,16 +29,17 @@ body{
   max-width: 1170px;
   margin: 0 auto;
   background-color: hsl(103, 100%, 87%);
+  padding: 0 2rem;
 }
 
 button{
   display: block;
   border: none;
-  padding: 1rem 2rem;
+  padding: 0.875rem 1.5rem;
   border-radius: 7px;
   color: whitesmoke;
   background-color: #8d2ab5;
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s linear;
@@ -50,17 +60,19 @@ table{
   color: whitesmoke;
   text-align: center;
   border: none;
-  font-size: 1rem;
+  font-size: 0.875rem;
   letter-spacing: 1px;
   border: 1px solid whitesmoke;
 }
 
 th{
   text-transform: uppercase;
-  padding: 1.5rem 3rem;
+  padding: 0.875rem;
 }
 
 td{
-  padding: 4rem 2rem;
+  padding: 3rem 0.875rem;
   cursor: pointer;
+  width: 10rem;
+  font-size: 12px;
 }

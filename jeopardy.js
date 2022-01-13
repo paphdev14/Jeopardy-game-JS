@@ -78,6 +78,8 @@ async function getCategories(categories) {
     };
   });
 }
+
+
 // getCategory(categories);
 // console.log(categories);
 
@@ -89,9 +91,8 @@ async function getCategories(categories) {
  *   (initally, just show a "?" where the question/answer would go.)
  */
 
-async function fillTable() {
+async function fillTable(query) {
   // Create table tags and variables
-
   const table = document.createElement("table");
   const tHead = document.createElement("thead");
   const tBody = document.createElement("tbody");
@@ -100,22 +101,27 @@ async function fillTable() {
   $("body").append(table);
 
   // For table head
-  for (let i = 0; i < WIDTH; i++) {
+  for (let i = 0; i < categories.length; i++) {
     $(tHead).append(tRowHead);
     let tHeading = document.createElement("th");
-    tHeading.innerText = "category";
+    let title = categories[i].title;
+    tHeading.innerText = `${title}`;
     tRowHead.append(tHeading);
   }
   // for table data
-  for (let k = 0; k < HEIGHT; k++) {
+        //Table row   
+  for (let j = 0; j < HEIGHT; j++) {
     let tRowData = document.createElement("tr");
     tBody.append(tRowData);
-    for (let j = 0; j < WIDTH; j++) {
-      let tData = document.createElement("td");
-      tData.innerText = "?";
+    
+    // Table data
+    for (let k = 0; k < WIDTH; k++) {
+        let tData = document.createElement("td");
+    //   tData.innerText = "?";
+      tData.innerText = `${categories[k].clues[j].question}`;
       tRowData.append(tData);
       // Set table data IDs
-      tData.setAttribute("id", `${j}-${k}`);
+      tData.setAttribute("id", `${k}-${j}`);
     }
   }
 }
@@ -128,7 +134,9 @@ async function fillTable() {
  * - if currently "answer", ignore click
  * */
 
-function handleClick(evt) {}
+function handleClick(evt) {
+    fillTable();
+}
 
 /** Wipe the current Jeopardy board, show the loading spinner,
  * and update the button used to fetch data.
